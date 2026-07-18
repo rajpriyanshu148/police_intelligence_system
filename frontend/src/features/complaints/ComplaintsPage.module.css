@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+}
+
+.filterRow {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 260px;
+}
+
+.selectBox {
+  min-width: 180px;
+}
+
+/* Detail page styling */
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .detailGrid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.metaInfoCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.metaItem {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: var(--space-2);
+}
+
+.metaItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.metaLabel {
+  font-weight: var(--weight-medium);
+  color: var(--muted-foreground);
+}
+
+.metaValue {
+  font-weight: var(--weight-semibold);
+}
+
+.complaintTextCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.complaintText {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.actionBar {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  justify-content: flex-end;
+}

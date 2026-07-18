@@ -1,0 +1,269 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+}
+
+.filterRow {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 260px;
+}
+
+.selectBox {
+  min-width: 180px;
+}
+
+/* Detail page tab layout */
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .metaGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .metaGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.metaCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.metaLabel {
+  font-size: var(--text-xs);
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-1);
+  display: block;
+}
+
+.metaValue {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+}
+
+.tabContent {
+  margin-top: var(--space-6);
+}
+
+.timelineSection {
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Timeline specific event log */
+.eventForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.actionBar {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+/* AIPAS Cockpit Modernization Styles */
+.cockpitGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.cockpitCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cockpitCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.graphContainer {
+  background-color: var(--background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.graphSvg {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.graphInfoPanel {
+  margin-top: var(--space-4);
+  width: 100%;
+  padding: var(--space-3);
+  background-color: var(--muted);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.copilotLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .copilotLayout {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* Decision Support Panels */
+.decisionSupportContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.decisionCard {
+  padding: 14px;
+  background-color: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.decisionCardWarning {
+  background-color: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.decisionCardSuccess {
+  background-color: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.decisionCardContent {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Case Health Cards */
+.healthGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .healthGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.healthCard {
+  padding: 12px;
+  background-color: var(--muted);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.healthValue {
+  font-size: var(--text-base);
+  font-weight: bold;
+  color: var(--primary);
+}
+
+/* Collaboration comments */
+.commentThread {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.commentItem {
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background-color: var(--muted);
+  border: 1px solid var(--card-border);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-weight: bold;
+}

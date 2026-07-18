@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  aipas-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aipas-frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aipas-network
+
+networks:
+  aipas-network:
+    name: aipas-network
+    external: true

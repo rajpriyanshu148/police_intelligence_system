@@ -1,0 +1,105 @@
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tabList {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 0;
+}
+
+.tab {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--muted-foreground);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--foreground);
+}
+
+.tabActive {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+}
+
+.breadcrumbItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.breadcrumbLink {
+  color: var(--muted-foreground);
+  transition: color var(--transition-fast);
+  cursor: pointer;
+}
+
+.breadcrumbLink:hover {
+  color: var(--foreground);
+}
+
+.breadcrumbCurrent {
+  color: var(--foreground);
+  font-weight: var(--weight-medium);
+}
+
+/* Dropdown */
+.dropdownWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 180px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  padding: var(--space-2) 0;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.dropdownItem:hover {
+  background-color: var(--muted);
+}
+
+.dropdownDivider {
+  height: 1px;
+  background-color: var(--card-border);
+  margin: var(--space-2) 0;
+}

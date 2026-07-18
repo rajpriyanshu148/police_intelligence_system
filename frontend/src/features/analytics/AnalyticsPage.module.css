@@ -1,0 +1,156 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+}
+
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .kpiRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .kpiRow {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .chartsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.hotspotsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.hotspotItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  background-color: var(--muted);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.hotspotName {
+  font-weight: var(--weight-semibold);
+}
+
+/* GIS Map Layouts */
+.gisContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .gisContainer {
+    grid-template-columns: 1.5fr 1fr;
+  }
+}
+
+.mapPanel {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.mapSvg {
+  width: 100%;
+  height: 380px;
+  background-color: #0b0f19;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  cursor: grab;
+}
+
+.mapSvg:active {
+  cursor: grabbing;
+}
+
+.mapFilters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.mapToggleBtn {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+  color: var(--muted-foreground);
+  transition: all 0.2s ease;
+}
+
+.mapToggleBtnActive {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* Hover Sector details */
+.mapSector {
+  transition: fill 0.3s ease, stroke-width 0.2s;
+  cursor: pointer;
+}
+
+.mapSector:hover {
+  fill-opacity: 0.65;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+}
+
+.pinsGroup circle {
+  transition: r 0.2s;
+}
+
+.pinsGroup circle:hover {
+  r: 9px;
+  fill: #ffffff;
+  stroke: #ef4444;
+}
+
+.forecastPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

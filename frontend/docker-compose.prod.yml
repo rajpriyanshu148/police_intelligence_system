@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  aipas-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: aipas-frontend-prod
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NODE_ENV=production
+    restart: always

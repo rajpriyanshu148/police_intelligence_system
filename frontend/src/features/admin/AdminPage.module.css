@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+}
+
+.tabContent {
+  margin-top: var(--space-6);
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.inlineEditRow {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}

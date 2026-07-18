@@ -1,0 +1,410 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+}
+
+.splitLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .splitLayout {
+    grid-template-columns: 1fr 1.5fr;
+  }
+}
+
+.listPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.listGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  background-color: var(--card-bg);
+  transition: all 0.2s ease;
+}
+
+.listItem:hover {
+  background-color: var(--muted);
+}
+
+.listItemSelected {
+  border-color: var(--primary);
+  background-color: var(--muted);
+}
+
+.itemIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.itemTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  display: block;
+}
+
+.itemMeta {
+  font-size: var(--text-xxs);
+  color: var(--muted-foreground);
+  margin-top: var(--space-1);
+}
+
+.detailsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* High-fidelity Previews */
+.previewBoxContainer {
+  width: 100%;
+  height: 220px;
+  background-color: #0b0f19;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewImageMock {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.4);
+  background: radial-gradient(circle, rgba(16,24,48,1) 0%, rgba(8,12,24,1) 100%);
+  position: relative;
+}
+
+.boundingTag {
+  position: absolute;
+  border: 1px solid var(--primary);
+  background: rgba(37,99,235,0.15);
+  color: var(--primary);
+  font-size: 8px;
+  font-family: monospace;
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-weight: bold;
+}
+
+.previewVideoMock {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.4);
+  background: radial-gradient(circle, rgba(16,24,48,1) 0%, rgba(8,12,24,1) 100%);
+  position: relative;
+}
+
+.videoScanTracker {
+  position: absolute;
+  border: 2px dashed #10b981;
+  background: rgba(16,185,129,0.08);
+  pointer-events: none;
+}
+
+.trackerLabel {
+  position: absolute;
+  top: -16px;
+  left: 0;
+  background-color: #10b981;
+  color: #fff;
+  font-size: 8px;
+  font-family: monospace;
+  padding: 1px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.videoControlsOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 9px;
+  color: #fff;
+  font-family: monospace;
+  gap: 8px;
+}
+
+.previewAudioMock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 90%;
+  color: #fff;
+}
+
+.audioWaveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 60px;
+}
+
+.audioBar {
+  width: 4px;
+  min-height: 4px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.previewDocMock {
+  width: 80%;
+  height: 80%;
+  background-color: #ffffff;
+  color: #0b0f19;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.docHeaderLine {
+  font-size: 10px;
+  font-weight: bold;
+  border-bottom: 2px solid var(--muted);
+  width: 100%;
+  text-align: center;
+  padding-bottom: 4px;
+}
+
+.previewSpreadsheetMock {
+  width: 90%;
+  height: 80%;
+  background-color: #1e293b;
+  border-radius: var(--radius-md);
+  padding: 10px;
+  overflow: auto;
+}
+
+.excelTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: monospace;
+  color: #f1f5f9;
+  font-size: 10px;
+}
+
+.excelTable th {
+  background-color: #334155;
+  color: #94a3b8;
+  padding: 6px;
+  text-align: left;
+  border: 1px solid #475569;
+}
+
+.excelTable td {
+  padding: 6px;
+  border: 1px solid #475569;
+}
+
+.previewArchiveMock {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 90%;
+  color: #fff;
+}
+
+.archiveFileRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #cbd5e1;
+  font-family: monospace;
+}
+
+/* Metadata and general formatting */
+.hashBlock {
+  font-family: monospace;
+  font-size: 10px;
+  background-color: var(--muted);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  display: inline-block;
+  max-width: 100%;
+  word-break: break-all;
+  margin-top: 4px;
+}
+
+/* Lifecycle tracker */
+.lifecycleBar {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-top: var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+.lifecycleNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  z-index: 1;
+}
+
+.lifecycleIndicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  border: 2px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+
+.lifecycleIndicatorDone {
+  background-color: var(--success);
+  color: #ffffff;
+  border-color: var(--success);
+}
+
+.lifecycleIndicatorCurrent {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+  color: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+}
+
+.lifecycleLabel {
+  font-size: 9px;
+  text-align: center;
+  color: var(--muted-foreground);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.lifecycleConnector {
+  position: absolute;
+  top: 20px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background-color: var(--card-border);
+  z-index: 0;
+}
+
+/* Terminal Processing UI */
+.terminalLoader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 30px;
+  background-color: #0b0f19;
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.spinIcon {
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.progressBarBg {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progressBarFill {
+  height: 100%;
+  background-color: var(--primary);
+  transition: width 0.15s ease-out;
+}
+
+.extractedTextContainer {
+  padding: 12px;
+  background-color: var(--muted);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: pre-line;
+  max-height: 160px;
+  overflow-y: auto;
+  color: var(--foreground);
+}
+
+.previewPlaceholderIcon {
+  opacity: 0.15;
+  margin-bottom: 8px;
+}
