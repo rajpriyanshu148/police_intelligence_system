@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: police-ai-service
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=sqlite:///data/police_intel.db
+      - JWT_SECRET_KEY=POLICE_INTEL_SUPER_SECRET_KEY_JWT
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+    volumes:
+      - ai-service-data:/app/data
+      - ai-service-logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/live')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  ai-service-data:
+  ai-service-logs:

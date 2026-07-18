@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: police_db
+    restart: always
+    environment:
+      POSTGRES_USER: police_admin
+      POSTGRES_PASSWORD: SecretPolicePassword123!
+      POSTGRES_DB: police_intelligence
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: police_web
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://police_admin:SecretPolicePassword123!@db:5432/police_intelligence
+    volumes:
+      - ..:/app
+
+volumes:
+  pgdata:

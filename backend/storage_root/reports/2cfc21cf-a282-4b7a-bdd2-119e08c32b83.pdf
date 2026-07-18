@@ -1,0 +1,21 @@
+<html>
+                <head><style>body { font-family: sans-serif; padding: 20px; } h1 { color: #2C3E50; }</style></head>
+                <body>
+                    <h1>AIPAS Operational Report</h1>
+                    <p>Generated At: 2026-07-17T05:25:42.699545+00:00</p>
+                    <p>Timeframe: weekly</p>
+                    <hr/>
+                    <pre>{
+  "cases": {
+    "total_cases": 0,
+    "average_aging_days": 0.0,
+    "status_counts": {}
+  },
+  "firs": {
+    "total_firs": 0,
+    "conversion_rate": 0.0,
+    "status_counts": {}
+  }
+}</pre>
+                </body>
+                </html>

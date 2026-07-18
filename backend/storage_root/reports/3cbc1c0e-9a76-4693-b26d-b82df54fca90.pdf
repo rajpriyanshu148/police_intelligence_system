@@ -1,0 +1,12 @@
+<html>
+                <head><style>body { font-family: sans-serif; padding: 20px; } h1 { color: #2C3E50; }</style></head>
+                <body>
+                    <h1>AIPAS Operational Report</h1>
+                    <p>Generated At: 2026-07-17T10:22:01.940713+00:00</p>
+                    <p>Timeframe: daily</p>
+                    <hr/>
+                    <pre>{
+  "crimes": []
+}</pre>
+                </body>
+                </html>
