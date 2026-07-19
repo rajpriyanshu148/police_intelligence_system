@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/your-username/police_intelligence_system/stargazers"><img src="https://img.shields.io/github/stars/your-username/police_intelligence_system?style=for-the-badge&logo=starship&color=F59E0B&labelColor=1F2937" alt="GitHub Stars" /></a>
-  <a href="https://github.com/your-username/police_intelligence_system/issues"><img src="https://img.shields.io/github/issues/your-username/police_intelligence_system?style=for-the-badge&color=EF4444&labelColor=1F2937" alt="Issues" /></a>
-  <a href="https://github.com/your-username/police_intelligence_system/commits/main"><img src="https://img.shields.io/github/last-commit/your-username/police_intelligence_system?style=for-the-badge&color=10B981&labelColor=1F2937" alt="Last Commit" /></a>
-  <a href="https://github.com/your-username/police_intelligence_system/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge&labelColor=1F2937" alt="MIT License" /></a>
+  <a href="https://github.com/rajpriyanshu148/police_intelligence_system/stargazers"><img src="https://img.shields.io/github/stars/rajpriyanshu148/police_intelligence_system?style=for-the-badge&logo=starship&color=F59E0B&labelColor=1F2937" alt="GitHub Stars" /></a>
+  <a href="https://github.com/rajpriyanshu148/police_intelligence_system/issues"><img src="https://img.shields.io/github/issues/rajpriyanshu148/police_intelligence_system?style=for-the-badge&color=EF4444&labelColor=1F2937" alt="Issues" /></a>
+  <a href="https://github.com/rajpriyanshu148/police_intelligence_system/commits/main"><img src="https://img.shields.io/github/last-commit/rajpriyanshu148/police_intelligence_system?style=for-the-badge&color=10B981&labelColor=1F2937" alt="Last Commit" /></a>
+  <a href="https://github.com/rajpriyanshu148/police_intelligence_system/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge&labelColor=1F2937" alt="MIT License" /></a>
 </p>
 
 <p align="center">
@@ -248,7 +248,7 @@ Git      >= 2.40
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/police_intelligence_system.git
+git clone https://github.com/rajpriyanshu148/police_intelligence_system.git
 cd police_intelligence_system
 ```
 
