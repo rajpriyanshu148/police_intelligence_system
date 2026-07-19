@@ -1,0 +1,82 @@
+[
+  {
+    "id": "bns_sec_303",
+    "act": "Bharatiya Nyaya Sanhita (BNS)",
+    "section": "Section 303",
+    "title": "Theft",
+    "description": "Whoever, intending to take dishonestly any movable property out of the possession of any person without that person's consent, moves that property in order to such taking, is said to commit theft.",
+    "punishment": "Imprisonment for a term which may extend to three years, or with fine, or with both."
+  },
+  {
+    "id": "bns_sec_309",
+    "act": "Bharatiya Nyaya Sanhita (BNS)",
+    "section": "Section 309",
+    "title": "Robbery",
+    "description": "In all robbery there is either theft or extortion. Theft is robbery if, in order to the committing of the theft, the offender voluntarily causes or attempts to cause to any person death or hurt or wrongful restraint, or fear of instant death or of instant hurt, or of instant wrongful restraint.",
+    "punishment": "Rigorous imprisonment for a term which may extend to ten years, and shall also be liable to fine."
+  },
+  {
+    "id": "bns_sec_103",
+    "act": "Bharatiya Nyaya Sanhita (BNS)",
+    "section": "Section 103",
+    "title": "Murder",
+    "description": "Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.",
+    "punishment": "Death penalty or life imprisonment and fine."
+  },
+  {
+    "id": "bns_sec_318",
+    "act": "Bharatiya Nyaya Sanhita (BNS)",
+    "section": "Section 318",
+    "title": "Cheating and Dishonestly Inducing Delivery of Property",
+    "description": "Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property to any person, or to consent that any person shall retain any property, is said to cheat.",
+    "punishment": "Imprisonment for a term which may extend to seven years, and shall also be liable to fine."
+  },
+  {
+    "id": "bns_sec_115",
+    "act": "Bharatiya Nyaya Sanhita (BNS)",
+    "section": "Section 115",
+    "title": "Voluntarily Causing Hurt",
+    "description": "Whoever does any act with the intention of thereby causing hurt to any person, or with the knowledge that he is likely thereby to cause hurt to any person, and does thereby cause hurt to any person, is said voluntarily to cause hurt.",
+    "punishment": "Imprisonment for a term which may extend to one year, or with fine which may extend to ten thousand rupees, or with both."
+  },
+  {
+    "id": "bns_sec_64",
+    "act": "Bharatiya Nyaya Sanhita (BNS)",
+    "section": "Section 64",
+    "title": "Rape / Sexual Assault",
+    "description": "A man is said to commit rape who has sexual intercourse with a woman under circumstances falling under any of the descriptions: against her will, without her consent, or when her consent has been obtained by putting her in fear of death or hurt.",
+    "punishment": "Rigorous imprisonment for a term which shall not be less than ten years, but which may extend to imprisonment for life, and shall also be liable to fine."
+  },
+  {
+    "id": "bnss_sec_173",
+    "act": "Bharatiya Nagarik Suraksha Sanhita (BNSS)",
+    "section": "Section 173",
+    "title": "Information in Cognizable Cases (FIR)",
+    "description": "Every information relating to the commission of a cognizable offence, if given orally to an officer in charge of a police station, shall be reduced to writing by him or under his direction. Provides for preliminary inquiry to be conducted before registration of FIR in certain cases.",
+    "punishment": "Procedural guidelines for police registration of complaints and online registration (e-FIR)."
+  },
+  {
+    "id": "bsa_sec_61",
+    "act": "Bharatiya Sakshya Adhiniyam (BSA)",
+    "section": "Section 61",
+    "title": "Admissibility of Electronic Records",
+    "description": "Any information contained in an electronic record which is printed on paper, stored, recorded or copied in optical or magnetic media produced by a computer shall be deemed to be also a document and shall be admissible in any proceedings, without further proof.",
+    "punishment": "Legal admissibility criteria for digital evidence including WhatsApp chats, emails, CCTV footage."
+  },
+  {
+    "id": "sop_cybercrime_investigation",
+    "act": "Police Standard Operating Procedure (SOP)",
+    "section": "SOP-01",
+    "title": "Cyber Fraud & Financial Crimes Investigation",
+    "description": "In case of online financial fraud, the investigating officer must immediately: 1. Contact the bank node officers to freeze the beneficiary accounts. 2. Request IP logs from the email/social media service provider. 3. Log the incident on the National Cyber Crime Reporting Portal (NCRP) within the golden hour.",
+    "punishment": "Internal investigation guidelines for rapid action in financial fraud cases."
+  },
+  {
+    "id": "sop_crime_scene_preservation",
+    "act": "Police Standard Operating Procedure (SOP)",
+    "section": "SOP-02",
+    "title": "Crime Scene Preservation and Evidence Collection",
+    "description": "For physical crimes like murder or robbery: 1. Cordoning off the area to prevent contamination. 2. Engaging forensic teams immediately. 3. Recording video/photography of the crime scene (mandated under BNSS). 4. Properly labeling and sealing evidence in tamper-proof bags.",
+    "punishment": "Internal guidelines to ensure the chain of custody of physical evidence."
+  }
+]

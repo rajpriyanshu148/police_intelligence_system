@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Intelligence & Assistance Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #030712;
+            height: 100vh;
+            overflow: hidden;
+            color: #f1f5f9;
+        }
+
+        /* ── Animated Background ── */
+        .bg-scene {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.12;
+            animation: float 12s ease-in-out infinite;
+        }
+        .blob-1 { width: 600px; height: 600px; background: #3b82f6; top: -100px; right: -100px; animation-delay: 0s; }
+        .blob-2 { width: 400px; height: 400px; background: #8b5cf6; bottom: -80px; left: 200px; animation-delay: -4s; }
+        .blob-3 { width: 350px; height: 350px; background: #06b6d4; top: 40%; left: -80px; animation-delay: -8s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            33% { transform: translateY(-30px) scale(1.05); }
+            66% { transform: translateY(20px) scale(0.97); }
+        }
+
+        /* ── Glass Card ── */
+        .glass {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        .glass:hover {
+            border-color: rgba(59, 130, 246, 0.25);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 30px rgba(59, 130, 246, 0.06), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        .glass-sidebar {
+            background: rgba(8, 14, 27, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-input {
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        .glass-input:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.7);
+            background: rgba(3, 7, 18, 0.8);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 0 20px rgba(59, 130, 246, 0.15);
+        }
+        .glass-input::placeholder { color: #475569; }
+
+        /* ── Gradient Text ── */
+        .grad-text-blue {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .grad-text-purple {
+            background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #7c3aed 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* ── Gradient Buttons ── */
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: 1px solid rgba(96, 165, 250, 0.25);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+        .btn-primary:active { transform: translateY(0px); }
+        .btn-success {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.25);
+            transition: all 0.2s ease; cursor: pointer;
+        }
+        .btn-success:hover { background: linear-gradient(135deg, #10b981 0%, #059669 100%); transform: translateY(-1px); }
+        .btn-ghost {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.2s ease; cursor: pointer;
+        }
+        .btn-ghost:hover { background: rgba(51, 65, 85, 0.7); border-color: rgba(255,255,255,0.1); }
+
+        /* ── Sidebar Nav Items ── */
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 16px; border-radius: 12px;
+            font-size: 13px; font-weight: 500; color: #94a3b8;
+            cursor: pointer; transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-align: left; width: 100%; background: transparent;
+        }
+        .nav-item:hover { color: #e2e8f0; background: rgba(30, 41, 59, 0.5); }
+        .nav-item.active {
+            color: #60a5fa;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.05));
+            border-color: rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.08);
+        }
+        .nav-item.active i { color: #3b82f6; }
+
+        /* ── Severity / Priority Badges ── */
+        .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+        .badge-critical { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+        .badge-high { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+        .badge-medium { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+        .badge-low { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+        .badge-pending { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+        .badge-processed { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+        .badge-blue { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+        /* ── Spinner ── */
+        .spinner { width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.15); border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Chat bubbles ── */
+        .bubble-user {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 18px 18px 4px 18px;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.2);
+        }
+        .bubble-ai {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 4px 18px 18px 18px;
+        }
+
+        /* ── Timeline ── */
+        .timeline-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+            position: absolute; left: -6px; top: 4px;
+        }
+
+        /* ── Progress / Divider ── */
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent); }
+
+        /* ── Glow hover card ── */
+        .glow-card { transition: all 0.3s ease; }
+        .glow-card:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 40px rgba(59,130,246,0.08); }
+    </style>
+</head>
+<body>
+    <!-- Animated background blobs -->
+    <div class="bg-scene">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div id="root" style="position:relative;z-index:1;height:100vh;"></div>
+
+    <script type="text/babel">
+        const API_BASE = "http://127.0.0.1:8000/api";
+
+        /* ─── Root App ─── */
+        function App() {
+            const [tab, setTab]           = React.useState("dashboard");
+            const [token, setToken]       = React.useState(localStorage.getItem("token") || "");
+            const [badge, setBadge]       = React.useState(localStorage.getItem("badge") || "");
+            const [username, setUsername] = React.useState(localStorage.getItem("username") || "");
+            const [analytics, setAnalytics] = React.useState(null);
+            const [loginUser, setLoginUser] = React.useState("inspector_sharma");
+            const [loginPass, setLoginPass] = React.useState("password123");
+            const [authErr, setAuthErr]   = React.useState("");
+
+            React.useEffect(() => { if (token) fetchAnalytics(); }, [token]);
+
+            const fetchAnalytics = async () => {
+                try {
+                    const r = await fetch(`${API_BASE}/cases/dashboard/analytics`);
+                    setAnalytics(await r.json());
+                } catch(e) {}
+            };
+
+            const handleLogin = async (e) => {
+                e.preventDefault(); setAuthErr("");
+                try {
+                    const r = await fetch(`${API_BASE}/auth/login`, {
+                        method:"POST", headers:{"Content-Type":"application/json"},
+                        body: JSON.stringify({ username: loginUser, password: loginPass })
+                    });
+                    if (!r.ok) { const d=await r.json(); throw new Error(d.detail||"Auth failed"); }
+                    const d = await r.json();
+                    localStorage.setItem("token", d.access_token);
+                    localStorage.setItem("badge", d.badge_number);
+                    localStorage.setItem("username", loginUser);
+                    setToken(d.access_token); setBadge(d.badge_number); setUsername(loginUser);
+                } catch(err) { setAuthErr(err.message); }
+            };
+
+            const logout = () => { localStorage.clear(); setToken(""); setBadge(""); setUsername(""); };
+
+            if (!token) return <LoginScreen loginUser={loginUser} setLoginUser={setLoginUser}
+                loginPass={loginPass} setLoginPass={setLoginPass} authErr={authErr} onLogin={handleLogin} />;
+
+            return (
+                <div style={{ display:"flex", height:"100vh", overflow:"hidden" }}>
+                    <Sidebar tab={tab} setTab={setTab} username={username} badge={badge} onLogout={logout} />
+                    <main style={{ flex:1, overflowY:"auto", padding:"32px" }}>
+                        {tab==="dashboard"    && <DashboardView analytics={analytics} onRefresh={fetchAnalytics} />}
+                        {tab==="complaints"   && <ComplaintsView refreshAnalytics={fetchAnalytics} />}
+                        {tab==="investigation" && <InvestigationView />}
+                        {tab==="legal"        && <LegalView />}
+                        {tab==="translation"  && <TranslationView />}
+                        {tab==="assistant"    && <AssistantView />}
+                    </main>
+                </div>
+            );
+        }
+
+        /* ─── Login Screen ─── */
+        function LoginScreen({ loginUser, setLoginUser, loginPass, setLoginPass, authErr, onLogin }) {
+            return (
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", padding:"24px" }}>
+                    <div className="glass glow-card" style={{ width:"100%", maxWidth:"420px", padding:"40px", borderRadius:"24px" }}>
+                        {/* Logo */}
+                        <div style={{ textAlign:"center", marginBottom:"32px" }}>
+                            <div style={{
+                                width:"64px", height:"64px", borderRadius:"18px", margin:"0 auto 16px",
+                                background:"linear-gradient(135deg,#1d4ed8,#7c3aed)",
+                                display:"flex", alignItems:"center", justifyContent:"center",
+                                boxShadow:"0 8px 30px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
+                            }}>
+                                <i className="fa-solid fa-shield-halved" style={{ fontSize:"26px", color:"#fff" }}></i>
+                            </div>
+                            <div style={{ fontSize:"20px", fontWeight:"800", letterSpacing:"0.05em", color:"#f1f5f9" }}>POLICE INTELLIGENCE</div>
+                            <div style={{ fontSize:"11px", color:"#64748b", letterSpacing:"0.15em", textTransform:"uppercase", marginTop:"4px", fontWeight:"600" }}>Command &amp; Advisory Platform</div>
+                        </div>
+
+                        {authErr && (
+                            <div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.2)", borderRadius:"12px", padding:"12px 16px", marginBottom:"20px", display:"flex", alignItems:"center", gap:"10px", color:"#f87171", fontSize:"13px" }}>
+                                <i className="fa-solid fa-triangle-exclamation"></i> {authErr}
+                            </div>
+                        )}
+
+                        <form onSubmit={onLogin} style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
+                            <Field label="Badge Username" icon="fa-user-shield">
+                                <input type="text" value={loginUser} onChange={e=>setLoginUser(e.target.value)}
+                                    placeholder="inspector_sharma"
+                                    className="glass-input" style={{ width:"100%", padding:"12px 12px 12px 40px", borderRadius:"12px", fontSize:"13px" }} required />
+                            </Field>
+                            <Field label="Access Key" icon="fa-key">
+                                <input type="password" value={loginPass} onChange={e=>setLoginPass(e.target.value)}
+                                    placeholder="••••••••••••"
+                                    className="glass-input" style={{ width:"100%", padding:"12px 12px 12px 40px", borderRadius:"12px", fontSize:"13px" }} required />
+                            </Field>
+                            <button type="submit" className="btn-primary"
+                                style={{ padding:"14px", borderRadius:"14px", color:"#fff", fontWeight:"700", fontSize:"14px", letterSpacing:"0.03em", marginTop:"4px" }}>
+                                Verify &amp; Access System
+                            </button>
+                        </form>
+
+                        <div className="divider" style={{ margin:"24px 0" }}></div>
+                        <p style={{ textAlign:"center", fontSize:"11px", color:"#475569" }}>Authorised Personnel Only &bull; Crime Branch Division</p>
+                    </div>
+                </div>
+            );
+        }
+
+        /* Helper for login fields */
+        function Field({ label, icon, children }) {
+            return (
+                <div style={{ display:"flex", flexDirection:"column", gap:"6px" }}>
+                    <label style={{ fontSize:"10px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em" }}>{label}</label>
+                    <div style={{ position:"relative" }}>
+                        <i className={`fa-solid ${icon}`} style={{ position:"absolute", left:"14px", top:"50%", transform:"translateY(-50%)", color:"#475569", fontSize:"13px" }}></i>
+                        {children}
+                    </div>
+                </div>
+            );
+        }
+
+        /* ─── Sidebar ─── */
+        function Sidebar({ tab, setTab, username, badge, onLogout }) {
+            const navItems = [
+                { id:"dashboard",    icon:"fa-chart-line",       label:"Dashboard"           },
+                { id:"complaints",   icon:"fa-file-signature",   label:"Complaints Hub"      },
+                { id:"investigation",icon:"fa-folder-open",      label:"Investigation Registry"},
+                { id:"legal",        icon:"fa-scale-balanced",   label:"Legal Search"        },
+                { id:"translation",  icon:"fa-language",         label:"Translation Center"  },
+                { id:"assistant",    icon:"fa-robot",            label:"AI Assistant"        },
+            ];
+
+            return (
+                <aside className="glass-sidebar" style={{ width:"248px", display:"flex", flexDirection:"column", justifyContent:"space-between", flexShrink:0 }}>
+                    <div>
+                        {/* Brand */}
+                        <div style={{ padding:"24px 20px", borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+                            <div style={{ display:"flex", alignItems:"center", gap:"12px" }}>
+                                <div style={{
+                                    width:"38px", height:"38px", borderRadius:"12px", flexShrink:0,
+                                    background:"linear-gradient(135deg,#1d4ed8,#7c3aed)",
+                                    display:"flex", alignItems:"center", justifyContent:"center",
+                                    boxShadow:"0 4px 15px rgba(37,99,235,0.35)"
+                                }}>
+                                    <i className="fa-solid fa-building-columns" style={{ color:"#fff", fontSize:"15px" }}></i>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize:"12px", fontWeight:"800", letterSpacing:"0.07em", color:"#e2e8f0" }}>CRIME BRANCH</div>
+                                    <div style={{ fontSize:"9px", color:"#475569", letterSpacing:"0.12em", textTransform:"uppercase", fontWeight:"600" }}>General Diary</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Nav */}
+                        <nav style={{ padding:"12px" }}>
+                            {navItems.map(it => (
+                                <button key={it.id} onClick={()=>setTab(it.id)} className={`nav-item ${tab===it.id?"active":""}`}>
+                                    <i className={`fa-solid ${it.icon}`} style={{ width:"18px", textAlign:"center", fontSize:"13px" }}></i>
+                                    {it.label}
+                                </button>
+                            ))}
+                        </nav>
+                    </div>
+
+                    {/* User Footer */}
+                    <div style={{ padding:"16px", borderTop:"1px solid rgba(255,255,255,0.05)" }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"12px" }}>
+                            <div style={{
+                                width:"36px", height:"36px", borderRadius:"10px", flexShrink:0,
+                                background:"rgba(30,41,59,0.8)", border:"1px solid rgba(255,255,255,0.07)",
+                                display:"flex", alignItems:"center", justifyContent:"center"
+                            }}>
+                                <i className="fa-solid fa-user-tie" style={{ color:"#94a3b8", fontSize:"14px" }}></i>
+                            </div>
+                            <div style={{ overflow:"hidden" }}>
+                                <div style={{ fontSize:"12px", fontWeight:"700", color:"#e2e8f0", textTransform:"uppercase", letterSpacing:"0.03em" }}>{username.replace(/_/g," ")}</div>
+                                <div style={{ fontSize:"10px", color:"#475569", fontFamily:"monospace", marginTop:"1px" }}>{badge}</div>
+                            </div>
+                        </div>
+                        <button onClick={onLogout} className="btn-ghost" style={{
+                            width:"100%", padding:"9px", borderRadius:"10px",
+                            color:"#94a3b8", fontSize:"12px", fontWeight:"600",
+                            display:"flex", alignItems:"center", justifyContent:"center", gap:"8px"
+                        }}>
+                            <i className="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                        </button>
+                    </div>
+                </aside>
+            );
+        }
+
+        /* ─── Dashboard View ─── */
+        function DashboardView({ analytics, onRefresh }) {
+            React.useEffect(() => { if (analytics) buildCharts(); }, [analytics]);
+
+            const buildCharts = () => {
+                ["sevChart","catChart"].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { const c = Chart.getChart(el); if (c) c.destroy(); }
+                });
+                const sev = document.getElementById("sevChart");
+                if (sev && analytics?.severity_breakdown) {
+                    new Chart(sev, {
+                        type:"doughnut",
+                        data: {
+                            labels: Object.keys(analytics.severity_breakdown),
+                            datasets:[{ data: Object.values(analytics.severity_breakdown),
+                                backgroundColor:["#3b82f6","#f59e0b","#ef4444","#10b981"],
+                                borderColor:"rgba(8,14,27,0.9)", borderWidth:3 }]
+                        },
+                        options: { responsive:true, maintainAspectRatio:false,
+                            plugins:{ legend:{ position:"bottom", labels:{ color:"#94a3b8", font:{ size:11, weight:"600" }, padding:16 } } },
+                            cutout:"68%" }
+                    });
+                }
+                const cat = document.getElementById("catChart");
+                if (cat && analytics?.category_breakdown) {
+                    new Chart(cat, {
+                        type:"bar",
+                        data: {
+                            labels: Object.keys(analytics.category_breakdown),
+                            datasets:[{ data: Object.values(analytics.category_breakdown),
+                                backgroundColor:"rgba(59,130,246,0.75)", borderColor:"#3b82f6", borderWidth:1.5, borderRadius:8, borderSkipped:false }]
+                        },
+                        options: { responsive:true, maintainAspectRatio:false,
+                            scales:{ y:{ grid:{ color:"rgba(255,255,255,0.04)" }, ticks:{ color:"#64748b", font:{size:11} } },
+                                     x:{ grid:{ display:false }, ticks:{ color:"#64748b", font:{size:11} } } },
+                            plugins:{ legend:{ display:false } } }
+                    });
+                }
+            };
+
+            if (!analytics) return <Loading text="Loading intelligence metrics..." />;
+
+            const counters = analytics.counters || {};
+            const stats = [
+                { icon:"fa-shield-halved", label:"Total Cases", value: counters.total_cases||0, color:"#3b82f6", bg:"rgba(59,130,246,0.1)", border:"rgba(59,130,246,0.2)" },
+                { icon:"fa-hourglass-half", label:"Awaiting AI Intake", value: counters.pending_complaints||0, color:"#f59e0b", bg:"rgba(245,158,11,0.1)", border:"rgba(245,158,11,0.2)" },
+                { icon:"fa-circle-check", label:"Processed", value: (counters.total_complaints||0)-(counters.pending_complaints||0), color:"#10b981", bg:"rgba(16,185,129,0.1)", border:"rgba(16,185,129,0.2)" },
+            ];
+
+            return (
+                <div style={{ display:"flex", flexDirection:"column", gap:"24px" }}>
+                    {/* Header */}
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                        <div>
+                            <h1 style={{ fontSize:"24px", fontWeight:"800", letterSpacing:"-0.02em" }}>
+                                <span className="grad-text-blue">Command </span>Dashboard
+                            </h1>
+                            <p style={{ color:"#64748b", fontSize:"13px", marginTop:"4px" }}>Unified intelligence platform — real-time case analytics</p>
+                        </div>
+                        <button onClick={onRefresh} className="btn-ghost"
+                            style={{ padding:"10px 18px", borderRadius:"12px", color:"#94a3b8", fontSize:"13px", fontWeight:"600", display:"flex", alignItems:"center", gap:"8px" }}>
+                            <i className="fa-solid fa-arrows-rotate"></i> Refresh
+                        </button>
+                    </div>
+
+                    {/* Stat Cards */}
+                    <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"20px" }}>
+                        {stats.map((s,i) => (
+                            <div key={i} className="glass glow-card" style={{ padding:"24px", borderRadius:"20px", borderColor:s.border, display:"flex", alignItems:"center", gap:"18px" }}>
+                                <div style={{ width:"52px", height:"52px", borderRadius:"14px", background:s.bg, border:`1px solid ${s.border}`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, boxShadow:`0 0 20px ${s.bg}` }}>
+                                    <i className={`fa-solid ${s.icon}`} style={{ fontSize:"20px", color:s.color }}></i>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize:"32px", fontWeight:"800", color:"#f1f5f9", letterSpacing:"-0.03em" }}>{s.value}</div>
+                                    <div style={{ fontSize:"11px", color:"#64748b", fontWeight:"600", textTransform:"uppercase", letterSpacing:"0.08em", marginTop:"2px" }}>{s.label}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Charts */}
+                    <div style={{ display:"grid", gridTemplateColumns:"1fr 1.5fr", gap:"20px" }}>
+                        <div className="glass glow-card" style={{ padding:"24px", borderRadius:"20px" }}>
+                            <p style={{ fontSize:"11px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"20px" }}>Severity Breakdown</p>
+                            <div style={{ height:"220px" }}><canvas id="sevChart"></canvas></div>
+                        </div>
+                        <div className="glass glow-card" style={{ padding:"24px", borderRadius:"20px" }}>
+                            <p style={{ fontSize:"11px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"20px" }}>Cases by Category</p>
+                            <div style={{ height:"220px" }}><canvas id="catChart"></canvas></div>
+                        </div>
+                    </div>
+
+                    {/* Recent Complaints Table */}
+                    {analytics.recent_complaints?.length > 0 && (
+                        <div className="glass" style={{ borderRadius:"20px", overflow:"hidden" }}>
+                            <div style={{ padding:"20px 24px", borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+                                <p style={{ fontSize:"11px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em" }}>Recent Incidents</p>
+                            </div>
+                            <table style={{ width:"100%", borderCollapse:"collapse" }}>
+                                <thead>
+                                    <tr style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
+                                        {["Complainant","Date Filed","Complaint Preview","Status"].map(h=>(
+                                            <th key={h} style={{ padding:"10px 20px", textAlign:"left", fontSize:"10px", fontWeight:"700", color:"#475569", textTransform:"uppercase", letterSpacing:"0.08em" }}>{h}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {analytics.recent_complaints.map((c,i)=>(
+                                        <tr key={i} style={{ borderBottom:"1px solid rgba(255,255,255,0.03)", transition:"background 0.15s" }}
+                                            onMouseEnter={e=>e.currentTarget.style.background="rgba(30,41,59,0.3)"}
+                                            onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                                            <td style={{ padding:"12px 20px", fontSize:"13px", fontWeight:"600", color:"#e2e8f0" }}>{c.citizen_name}</td>
+                                            <td style={{ padding:"12px 20px", fontSize:"12px", color:"#64748b" }}>{new Date(c.created_at).toLocaleDateString("en-IN")}</td>
+                                            <td style={{ padding:"12px 20px", fontSize:"12px", color:"#94a3b8", fontStyle:"italic", maxWidth:"260px" }}>"{c.text_snippet}"</td>
+                                            <td style={{ padding:"12px 20px" }}>
+                                                <span className={`badge ${c.status==="Pending"?"badge-pending":"badge-processed"}`}>{c.status}</span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        /* ─── Complaints Hub ─── */
+        function ComplaintsView({ refreshAnalytics }) {
+            const [complaints, setComplaints] = React.useState([]);
+            const [name, setName] = React.useState(""); const [contact, setContact] = React.useState(""); const [text, setText] = React.useState("");
+            const [submitting, setSubmitting] = React.useState(false);
+            const [processingId, setProcessingId] = React.useState(null);
+            const [agentResult, setAgentResult] = React.useState(null);
+            const [logs, setLogs] = React.useState([]);
+            const [finalizing, setFinalizing] = React.useState(false);
+
+            React.useEffect(()=>{ loadComplaints(); },[]);
+            const loadComplaints = async () => {
+                try { const r=await fetch(`${API_BASE}/cases/complaints`); setComplaints(await r.json()); } catch(e){}
+            };
+
+            const submitComplaint = async e => {
+                e.preventDefault(); setSubmitting(true);
+                try {
+                    await fetch(`${API_BASE}/cases/complaints`,{ method:"POST", headers:{"Content-Type":"application/json"},
+                        body:JSON.stringify({citizen_name:name,citizen_contact:contact,complaint_text:text}) });
+                    setName(""); setContact(""); setText(""); loadComplaints(); refreshAnalytics();
+                } finally { setSubmitting(false); }
+            };
+
+            const runIntake = async comp => {
+                setProcessingId(comp.id); setAgentResult(null);
+                const log = msg => setLogs(p=>[...p,msg]);
+                setLogs(["▸ Initiating LangGraph agent session..."]);
+                setTimeout(()=>log("▸ Node: analyze_complaint → Classifying crime & parsing parameters..."),600);
+                setTimeout(()=>log("▸ Node: retrieve_legal_cases → Querying FAISS index for BNS statutes..."),1300);
+                setTimeout(()=>log("▸ Node: generate_fir_draft → Composing formal FIR text & timeline..."),2000);
+                setTimeout(()=>log("▸ pause_for_review checkpoint reached — awaiting officer validation."),2700);
+                try {
+                    const r = await fetch(`${API_BASE}/agent/process`,{ method:"POST", headers:{"Content-Type":"application/json"},
+                        body:JSON.stringify({complaint_id:comp.id}) });
+                    const d = await r.json();
+                    setTimeout(()=>{ setAgentResult(d); setProcessingId(null); },3000);
+                } catch(e) { setProcessingId(null); log("✖ Workflow execution failed."); }
+            };
+
+            const approveCase = async () => {
+                setFinalizing(true);
+                try {
+                    const r = await fetch(`${API_BASE}/agent/approve`,{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(agentResult) });
+                    const d = await r.json();
+                    alert(`✓ Case Filed Successfully!\n\nCase No: ${d.case_number}\nFIR No: ${d.fir_number}`);
+                    setAgentResult(null); loadComplaints(); refreshAnalytics();
+                } finally { setFinalizing(false); }
+            };
+
+            return (
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1.5fr", gap:"24px", alignItems:"start" }}>
+                    {/* Left */}
+                    <div style={{ display:"flex", flexDirection:"column", gap:"20px" }}>
+                        {/* Registration Card */}
+                        <div className="glass glow-card" style={{ padding:"24px", borderRadius:"20px" }}>
+                            <SectionHeader icon="fa-plus-circle" title="Register New Incident" color="#3b82f6" />
+                            <form onSubmit={submitComplaint} style={{ display:"flex", flexDirection:"column", gap:"14px", marginTop:"20px" }}>
+                                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
+                                    <FormField label="Citizen Name">
+                                        <input value={name} onChange={e=>setName(e.target.value)} placeholder="R. K. Sen" className="glass-input"
+                                            style={{ width:"100%", padding:"10px 12px", borderRadius:"10px", fontSize:"13px" }} required />
+                                    </FormField>
+                                    <FormField label="Contact">
+                                        <input value={contact} onChange={e=>setContact(e.target.value)} placeholder="+91 98300..." className="glass-input"
+                                            style={{ width:"100%", padding:"10px 12px", borderRadius:"10px", fontSize:"13px" }} required />
+                                    </FormField>
+                                </div>
+                                <FormField label="Complaint Description">
+                                    <textarea rows="4" value={text} onChange={e=>setText(e.target.value)} className="glass-input"
+                                        style={{ width:"100%", padding:"10px 12px", borderRadius:"10px", fontSize:"13px", resize:"none", lineHeight:"1.6" }}
+                                        placeholder="Describe the incident — location, date, suspects, stolen items..." required />
+                                </FormField>
+                                <button type="submit" disabled={submitting} className="btn-primary"
+                                    style={{ padding:"12px", borderRadius:"12px", color:"#fff", fontWeight:"700", fontSize:"13px" }}>
+                                    {submitting ? "Persisting..." : "Register Complaint"}
+                                </button>
+                            </form>
+                        </div>
+
+                        {/* Backlog */}
+                        <div className="glass" style={{ padding:"24px", borderRadius:"20px" }}>
+                            <SectionHeader icon="fa-list-check" title="Intake Backlog" color="#a855f7" />
+                            <div style={{ marginTop:"16px", display:"flex", flexDirection:"column", gap:"10px", maxHeight:"320px", overflowY:"auto" }}>
+                                {complaints.length===0 && <p style={{ color:"#475569", fontSize:"13px", textAlign:"center", padding:"20px" }}>No complaints registered yet.</p>}
+                                {complaints.map(c=>(
+                                    <div key={c.id} style={{
+                                        background:"rgba(3,7,18,0.5)", border:"1px solid rgba(255,255,255,0.05)",
+                                        borderRadius:"14px", padding:"14px 16px",
+                                        display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:"12px"
+                                    }}>
+                                        <div style={{ overflow:"hidden", flex:1 }}>
+                                            <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"6px" }}>
+                                                <span style={{ fontSize:"13px", fontWeight:"700", color:"#e2e8f0" }}>{c.citizen_name}</span>
+                                                <span style={{ fontSize:"10px", color:"#475569", fontFamily:"monospace" }}>{new Date(c.created_at).toLocaleDateString("en-IN")}</span>
+                                            </div>
+                                            <p style={{ fontSize:"11px", color:"#64748b", lineHeight:"1.5", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
+                                                {c.complaint_text}
+                                            </p>
+                                        </div>
+                                        <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:"8px", flexShrink:0 }}>
+                                            <span className={`badge ${c.status==="Pending"?"badge-pending":"badge-processed"}`}>{c.status}</span>
+                                            {c.status!=="Processed" && (
+                                                <button onClick={()=>runIntake(c)} disabled={processingId!==null} className="btn-primary"
+                                                    style={{ padding:"6px 12px", borderRadius:"8px", fontSize:"11px", fontWeight:"700", display:"flex", alignItems:"center", gap:"6px" }}>
+                                                    <i className="fa-solid fa-brain"></i> Intake
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right — AI Results */}
+                    <div>
+                        {processingId!==null && (
+                            <div className="glass" style={{ padding:"32px", borderRadius:"20px", textAlign:"center" }}>
+                                <div className="spinner" style={{ margin:"0 auto 20px", width:"36px", height:"36px", borderWidth:"3px" }}></div>
+                                <p style={{ fontSize:"14px", fontWeight:"700", color:"#e2e8f0", marginBottom:"16px" }}>LangGraph Pipeline Executing...</p>
+                                <div style={{ background:"rgba(3,7,18,0.7)", border:"1px solid rgba(255,255,255,0.05)", borderRadius:"12px", padding:"16px", textAlign:"left", maxHeight:"180px", overflowY:"auto" }}>
+                                    {logs.map((l,i)=>(
+                                        <p key={i} style={{ fontSize:"11px", color:"#34d399", fontFamily:"monospace", lineHeight:"1.8" }}>{l}</p>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {agentResult && !processingId && (
+                            <div className="glass" style={{ padding:"28px", borderRadius:"20px" }}>
+                                {/* Result Header */}
+                                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"20px", paddingBottom:"16px", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+                                    <div>
+                                        <h3 style={{ fontSize:"16px", fontWeight:"800", color:"#f1f5f9" }}>AI Advisory Review</h3>
+                                        <p style={{ fontSize:"12px", color:"#64748b", marginTop:"2px" }}>Review and edit before registering.</p>
+                                    </div>
+                                    <div style={{ display:"flex", gap:"8px" }}>
+                                        <SeverityBadge level={agentResult.severity} />
+                                        <PriorityBadge level={agentResult.priority} />
+                                    </div>
+                                </div>
+
+                                <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
+                                    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
+                                        <FormField label="Crime Category">
+                                            <input value={agentResult.category} onChange={e=>setAgentResult({...agentResult,category:e.target.value})}
+                                                className="glass-input" style={{ width:"100%", padding:"9px 12px", borderRadius:"10px", fontSize:"13px" }} />
+                                        </FormField>
+                                        <FormField label="Severity Tier">
+                                            <select value={agentResult.severity} onChange={e=>setAgentResult({...agentResult,severity:e.target.value})}
+                                                className="glass-input" style={{ width:"100%", padding:"9px 12px", borderRadius:"10px", fontSize:"13px" }}>
+                                                {["Low","Medium","High","Critical"].map(s=><option key={s}>{s}</option>)}
+                                            </select>
+                                        </FormField>
+                                    </div>
+
+                                    <FormField label="Extracted NER Entities">
+                                        <div style={{ background:"rgba(3,7,18,0.6)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:"12px", padding:"12px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px" }}>
+                                            {Object.entries(agentResult.entities||{}).map(([k,v])=>(
+                                                <div key={k} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", fontSize:"12px" }}>
+                                                    <span style={{ color:"#64748b", fontWeight:"600" }}>{k}:</span>
+                                                    <input value={v} onChange={e=>setAgentResult({...agentResult,entities:{...agentResult.entities,[k]:e.target.value}})}
+                                                        style={{ background:"transparent", border:"none", outline:"none", color:"#e2e8f0", textAlign:"right", fontSize:"12px", maxWidth:"130px" }} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </FormField>
+
+                                    {agentResult.legal_sections?.length>0 && (
+                                        <FormField label="RAG Legal Recommendations">
+                                            <div style={{ background:"rgba(3,7,18,0.6)", border:"1px solid rgba(59,130,246,0.15)", borderRadius:"12px", padding:"12px", maxHeight:"120px", overflowY:"auto" }}>
+                                                {agentResult.legal_sections.map((s,i)=>(
+                                                    <div key={i} style={{ paddingBottom:"8px", marginBottom:"8px", borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
+                                                        <p style={{ fontSize:"12px", fontWeight:"700", color:"#60a5fa" }}>{s.act} — {s.section} ({s.title})</p>
+                                                        <p style={{ fontSize:"10px", color:"#64748b", marginTop:"2px" }}>{s.description}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </FormField>
+                                    )}
+
+                                    <FormField label="Generated FIR Draft">
+                                        <textarea rows="5" value={agentResult.fir_draft} onChange={e=>setAgentResult({...agentResult,fir_draft:e.target.value})}
+                                            className="glass-input" style={{ width:"100%", padding:"10px 12px", borderRadius:"10px", fontSize:"11px", fontFamily:"monospace", resize:"none", lineHeight:"1.7" }} />
+                                    </FormField>
+
+                                    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
+                                        <button onClick={()=>setAgentResult(null)} className="btn-ghost"
+                                            style={{ padding:"12px", borderRadius:"12px", color:"#94a3b8", fontWeight:"600", fontSize:"13px" }}>
+                                            Discard Draft
+                                        </button>
+                                        <button onClick={approveCase} disabled={finalizing} className="btn-success"
+                                            style={{ padding:"12px", borderRadius:"12px", color:"#fff", fontWeight:"700", fontSize:"13px", display:"flex", alignItems:"center", justifyContent:"center", gap:"8px" }}>
+                                            {finalizing?<><div className="spinner"></div><span>Filing...</span></>:<><i className="fa-solid fa-check-circle"></i> Approve &amp; File FIR</>}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {!processingId && !agentResult && (
+                            <EmptyState icon="fa-brain" title="No Active AI Session" subtitle="Select a complaint from the backlog and click Intake to start the LangGraph pipeline." />
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        /* ─── Investigation Registry ─── */
+        function InvestigationView() {
+            const [cases, setCases] = React.useState([]);
+            const [selected, setSelected] = React.useState(null);
+            const [report, setReport] = React.useState("");
+            const [genReporting, setGenReporting] = React.useState(false);
+
+            React.useEffect(()=>{ loadCases(); },[]);
+            const loadCases = async () => {
+                try { const r=await fetch(`${API_BASE}/cases`); setCases(await r.json()); } catch(e){}
+            };
+            const loadDetail = async id => {
+                setReport("");
+                try { const r=await fetch(`${API_BASE}/cases/${id}`); setSelected(await r.json()); } catch(e){}
+            };
+            const generateReport = async () => {
+                setGenReporting(true);
+                try {
+                    const r=await fetch(`${API_BASE}/agent/report`,{ method:"POST", headers:{"Content-Type":"application/json"},
+                        body:JSON.stringify({ complaint_text:selected.complaint.complaint_text, legal_context:selected.fir?.legal_sections||"BNS Codes" }) });
+                    const d=await r.json(); setReport(d.report);
+                } finally { setGenReporting(false); }
+            };
+
+            return (
+                <div style={{ display:"grid", gridTemplateColumns:"280px 1fr", gap:"20px", alignItems:"start" }}>
+                    {/* Case list */}
+                    <div className="glass" style={{ borderRadius:"20px", overflow:"hidden" }}>
+                        <div style={{ padding:"16px 20px", borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+                            <SectionHeader icon="fa-folder-open" title="Case Registry" color="#3b82f6" />
+                        </div>
+                        <div style={{ maxHeight:"calc(100vh - 180px)", overflowY:"auto" }}>
+                            {cases.length===0 && <p style={{ color:"#475569", fontSize:"13px", textAlign:"center", padding:"30px" }}>No cases on record.</p>}
+                            {cases.map(c=>(
+                                <div key={c.id} onClick={()=>loadDetail(c.id)} style={{
+                                    padding:"14px 20px", cursor:"pointer", transition:"background 0.15s",
+                                    borderBottom:"1px solid rgba(255,255,255,0.03)",
+                                    background: selected?.id===c.id?"rgba(37,99,235,0.12)":"transparent",
+                                    borderLeft: selected?.id===c.id?"3px solid #3b82f6":"3px solid transparent"
+                                }}
+                                    onMouseEnter={e=>{ if(selected?.id!==c.id) e.currentTarget.style.background="rgba(30,41,59,0.4)"; }}
+                                    onMouseLeave={e=>{ if(selected?.id!==c.id) e.currentTarget.style.background="transparent"; }}>
+                                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"4px" }}>
+                                        <span style={{ fontSize:"10px", fontFamily:"monospace", color:"#3b82f6", fontWeight:"700" }}>{c.case_number}</span>
+                                        <SeverityBadge level={c.severity} />
+                                    </div>
+                                    <p style={{ fontSize:"12px", fontWeight:"600", color:"#e2e8f0", lineHeight:"1.4", marginBottom:"6px" }}>{c.title}</p>
+                                    <p style={{ fontSize:"10px", color:"#64748b" }}>{c.category}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Detail Panel */}
+                    {selected ? (
+                        <div className="glass" style={{ borderRadius:"20px", padding:"28px" }}>
+                            {/* Case header */}
+                            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", paddingBottom:"20px", marginBottom:"20px", borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+                                <div>
+                                    <span style={{ fontSize:"11px", fontFamily:"monospace", color:"#3b82f6", fontWeight:"700" }}>{selected.case_number}</span>
+                                    <h2 style={{ fontSize:"18px", fontWeight:"800", color:"#f1f5f9", marginTop:"4px", letterSpacing:"-0.02em" }}>{selected.title}</h2>
+                                    <p style={{ fontSize:"12px", color:"#64748b", marginTop:"4px" }}>
+                                        Investigator: <span style={{ color:"#94a3b8", fontWeight:"600", textTransform:"uppercase" }}>{selected.assigned_officer}</span>
+                                    </p>
+                                </div>
+                                <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:"10px" }}>
+                                    <span className="badge badge-blue">{selected.status}</span>
+                                    <button onClick={generateReport} disabled={genReporting} className="btn-primary"
+                                        style={{ padding:"9px 16px", borderRadius:"10px", color:"#fff", fontSize:"12px", fontWeight:"700", display:"flex", alignItems:"center", gap:"8px" }}>
+                                        {genReporting?<div className="spinner" style={{width:"14px",height:"14px",borderWidth:"2px"}}></div>:<i className="fa-solid fa-file-invoice"></i>}
+                                        Generate Report
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Report window */}
+                            {report && (
+                                <div style={{ background:"rgba(3,7,18,0.7)", border:"1px solid rgba(59,130,246,0.2)", borderRadius:"16px", padding:"20px", marginBottom:"20px" }}>
+                                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"12px", paddingBottom:"10px", borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+                                        <span style={{ fontSize:"10px", fontWeight:"700", color:"#60a5fa", textTransform:"uppercase", letterSpacing:"0.1em" }}>Generated Charge Sheet</span>
+                                        <button onClick={()=>{ const w=window.open("","_blank"); w.document.write(`<pre style="font-family:monospace;padding:40px;background:#fff;color:#000;font-size:13px;">${report}</pre>`); w.document.close(); }}
+                                            style={{ fontSize:"11px", color:"#60a5fa", background:"transparent", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:"6px" }}>
+                                            <i className="fa-solid fa-print"></i> Print
+                                        </button>
+                                    </div>
+                                    <pre style={{ fontSize:"11px", color:"#cbd5e1", fontFamily:"monospace", lineHeight:"1.7", whiteSpace:"pre-wrap", overflow:"auto" }}>{report}</pre>
+                                </div>
+                            )}
+
+                            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"20px" }}>
+                                {/* Complaint & Entities */}
+                                <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
+                                    <div>
+                                        <p style={{ fontSize:"10px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"10px" }}>Citizen Complaint</p>
+                                        <div style={{ background:"rgba(3,7,18,0.5)", border:"1px solid rgba(255,255,255,0.05)", borderRadius:"12px", padding:"14px", fontSize:"12px", color:"#94a3b8", fontStyle:"italic", lineHeight:"1.6" }}>
+                                            "{selected.complaint.complaint_text}"
+                                        </div>
+                                        <p style={{ fontSize:"10px", color:"#475569", marginTop:"8px" }}>
+                                            {selected.complaint.citizen_name} • {selected.complaint.citizen_contact}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p style={{ fontSize:"10px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"10px" }}>Named Entities</p>
+                                        <div style={{ display:"flex", flexWrap:"wrap", gap:"6px" }}>
+                                            {selected.entities.map((e,i)=>(
+                                                <span key={i} style={{ background:"rgba(30,41,59,0.6)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:"8px", padding:"5px 10px", fontSize:"11px", color:"#94a3b8" }}>
+                                                    <strong style={{ color:"#64748b" }}>{e.type}:</strong> {e.value}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Timeline */}
+                                <div>
+                                    <p style={{ fontSize:"10px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"14px" }}>Investigation Timeline</p>
+                                    <div style={{ position:"relative", paddingLeft:"20px", borderLeft:"1px solid rgba(59,130,246,0.2)" }}>
+                                        {selected.timeline.map((ev,i)=>(
+                                            <div key={i} style={{ position:"relative", marginBottom:"20px" }}>
+                                                <div className="timeline-dot"></div>
+                                                <span style={{ fontSize:"10px", fontFamily:"monospace", color:"#3b82f6", fontWeight:"700" }}>{new Date(ev.event_time).toLocaleDateString("en-IN")}</span>
+                                                <h5 style={{ fontSize:"12px", fontWeight:"700", color:"#e2e8f0", marginTop:"2px" }}>{ev.title}</h5>
+                                                <p style={{ fontSize:"11px", color:"#64748b", lineHeight:"1.5", marginTop:"3px" }}>{ev.description}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <EmptyState icon="fa-folder" title="No Case Selected" subtitle="Click a case from the registry to load investigation details." />
+                    )}
+                </div>
+            );
+        }
+
+        /* ─── Legal Search ─── */
+        function LegalView() {
+            const [query, setQuery] = React.useState("");
+            const [results, setResults] = React.useState([]);
+            const [searching, setSearching] = React.useState(false);
+
+            const search = async e => {
+                e.preventDefault(); setSearching(true);
+                try {
+                    const r=await fetch(`${API_BASE}/cases/search/legal`,{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({query,top_k:4}) });
+                    const d=await r.json(); setResults(d.results||[]);
+                } finally { setSearching(false); }
+            };
+
+            return (
+                <div style={{ display:"flex", flexDirection:"column", gap:"24px" }}>
+                    <div>
+                        <h1 style={{ fontSize:"24px", fontWeight:"800", letterSpacing:"-0.02em" }}>
+                            <span className="grad-text-blue">Legal </span>Semantic Search
+                        </h1>
+                        <p style={{ color:"#64748b", fontSize:"13px", marginTop:"4px" }}>Query BNS, BNSS, BSA statutes and police SOPs using natural language.</p>
+                    </div>
+
+                    <form onSubmit={search} style={{ display:"flex", gap:"12px" }}>
+                        <div style={{ flex:1, position:"relative" }}>
+                            <i className="fa-solid fa-magnifying-glass" style={{ position:"absolute", left:"16px", top:"50%", transform:"translateY(-50%)", color:"#475569", fontSize:"14px" }}></i>
+                            <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Describe a crime, e.g. 'knife robbery at night' or 'bank KYC cheat call'..."
+                                className="glass-input" style={{ width:"100%", padding:"14px 16px 14px 44px", borderRadius:"14px", fontSize:"14px" }} required />
+                        </div>
+                        <button type="submit" disabled={searching} className="btn-primary"
+                            style={{ padding:"14px 28px", borderRadius:"14px", color:"#fff", fontWeight:"700", fontSize:"14px", display:"flex", alignItems:"center", gap:"10px", whiteSpace:"nowrap" }}>
+                            {searching?<div className="spinner" style={{width:"16px",height:"16px",borderWidth:"2px"}}></div>:<i className="fa-solid fa-search"></i>}
+                            Search Codes
+                        </button>
+                    </form>
+
+                    {results.length>0 && (
+                        <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"16px" }}>
+                            {results.map((doc,i)=>(
+                                <div key={i} className="glass glow-card" style={{ padding:"22px", borderRadius:"18px", display:"flex", flexDirection:"column", gap:"12px" }}>
+                                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+                                        <div style={{ display:"flex", flexDirection:"column", gap:"6px" }}>
+                                            <span style={{ fontSize:"10px", background:"rgba(59,130,246,0.15)", border:"1px solid rgba(59,130,246,0.2)", color:"#60a5fa", padding:"3px 10px", borderRadius:"100px", fontWeight:"700", width:"fit-content" }}>{doc.act}</span>
+                                            <span style={{ fontSize:"12px", fontFamily:"monospace", color:"#94a3b8", fontWeight:"700" }}>{doc.section}</span>
+                                        </div>
+                                        <div style={{ background:"rgba(16,185,129,0.1)", border:"1px solid rgba(16,185,129,0.2)", borderRadius:"8px", padding:"4px 10px" }}>
+                                            <span style={{ fontSize:"11px", fontWeight:"700", color:"#34d399" }}>{Math.round(doc.similarity_score*100)}% match</span>
+                                        </div>
+                                    </div>
+                                    <h4 style={{ fontSize:"15px", fontWeight:"800", color:"#f1f5f9", letterSpacing:"-0.02em" }}>{doc.title}</h4>
+                                    <p style={{ fontSize:"12px", color:"#64748b", lineHeight:"1.6", fontStyle:"italic" }}>{doc.description}</p>
+                                    <div style={{ background:"rgba(245,158,11,0.07)", border:"1px solid rgba(245,158,11,0.15)", borderRadius:"10px", padding:"10px 14px" }}>
+                                        <p style={{ fontSize:"10px", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.08em", fontWeight:"700", marginBottom:"4px" }}>Statutory Punishment</p>
+                                        <p style={{ fontSize:"12px", color:"#fbbf24", lineHeight:"1.5" }}>{doc.punishment}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {!searching && results.length===0 && (
+                        <EmptyState icon="fa-scale-balanced" title="Awaiting Query" subtitle="Enter a plain-language description of a crime to retrieve matching BNS/BNSS statutes." />
+                    )}
+                </div>
+            );
+        }
+
+        /* ─── Translation Center ─── */
+        function TranslationView() {
+            const [src, setSrc] = React.useState("");
+            const [out, setOut] = React.useState("");
+            const [loading, setLoading] = React.useState(false);
+
+            const translate = async e => {
+                e.preventDefault(); setLoading(true);
+                try {
+                    const r=await fetch(`${API_BASE}/agent/translate`,{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({text:src}) });
+                    const d=await r.json(); setOut(d.translated_text);
+                } finally { setLoading(false); }
+            };
+
+            return (
+                <div style={{ display:"flex", flexDirection:"column", gap:"24px" }}>
+                    <div>
+                        <h1 style={{ fontSize:"24px", fontWeight:"800", letterSpacing:"-0.02em" }}>
+                            <span className="grad-text-purple">Translation </span>Center
+                        </h1>
+                        <p style={{ color:"#64748b", fontSize:"13px", marginTop:"4px" }}>Translate regional complaints (Hindi ↔ English) for standardised LangGraph intake.</p>
+                    </div>
+
+                    <div className="glass" style={{ padding:"32px", borderRadius:"24px" }}>
+                        <form onSubmit={translate}>
+                            <div style={{ display:"grid", gridTemplateColumns:"1fr 120px 1fr", gap:"20px", alignItems:"center" }}>
+                                {/* Source */}
+                                <div>
+                                    <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"12px" }}>
+                                        <div style={{ width:"8px", height:"8px", borderRadius:"50%", background:"#3b82f6" }}></div>
+                                        <p style={{ fontSize:"11px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em" }}>Source (Hindi / English)</p>
+                                    </div>
+                                    <textarea rows="6" value={src} onChange={e=>setSrc(e.target.value)}
+                                        className="glass-input" style={{ width:"100%", padding:"14px", borderRadius:"14px", fontSize:"13px", resize:"none", lineHeight:"1.7" }}
+                                        placeholder="e.g.  mera phone chori ho gaya, kal raat station ke paas..." required />
+                                </div>
+
+                                {/* Middle arrow */}
+                                <div style={{ textAlign:"center" }}>
+                                    <button type="submit" disabled={loading} className="btn-primary"
+                                        style={{ width:"56px", height:"56px", borderRadius:"16px", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto", fontSize:"18px" }}>
+                                        {loading?<div className="spinner" style={{width:"20px",height:"20px",borderWidth:"2px"}}></div>:<i className="fa-solid fa-right-left"></i>}
+                                    </button>
+                                    <p style={{ fontSize:"10px", color:"#475569", marginTop:"8px", fontWeight:"600" }}>Translate</p>
+                                </div>
+
+                                {/* Output */}
+                                <div>
+                                    <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"12px" }}>
+                                        <div style={{ width:"8px", height:"8px", borderRadius:"50%", background:"#a855f7" }}></div>
+                                        <p style={{ fontSize:"11px", fontWeight:"700", color:"#64748b", textTransform:"uppercase", letterSpacing:"0.1em" }}>Translated Output</p>
+                                    </div>
+                                    <div style={{ background:"rgba(3,7,18,0.5)", border:"1px solid rgba(168,85,247,0.15)", borderRadius:"14px", padding:"14px", minHeight:"152px", fontSize:"13px", color: out?"#e2e8f0":"#475569", lineHeight:"1.7", fontStyle: out?"normal":"italic" }}>
+                                        {out || "Awaiting translation output..."}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    {/* Feature callouts */}
+                    <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"16px" }}>
+                        {[
+                            { icon:"fa-language", color:"#3b82f6", title:"Hindi → English", desc:"Translate regional dialect complaints for accurate AI model intake and classification." },
+                            { icon:"fa-right-left", color:"#a855f7", title:"English → Hindi", desc:"Convert drafted English FIRs and reports into Hindi for citizen communication." },
+                            { icon:"fa-brain", color:"#06b6d4", title:"AI-Powered NLP", desc:"Understands colloquial, abbreviated, and dialectal language variations automatically." },
+                        ].map((f,i)=>(
+                            <div key={i} className="glass glow-card" style={{ padding:"20px", borderRadius:"16px", textAlign:"center" }}>
+                                <div style={{ width:"44px", height:"44px", borderRadius:"12px", background:`rgba(${i===0?"59,130,246":i===1?"168,85,247":"6,182,212"},0.12)`, border:`1px solid rgba(${i===0?"59,130,246":i===1?"168,85,247":"6,182,212"},0.2)`, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 12px" }}>
+                                    <i className={`fa-solid ${f.icon}`} style={{ color:f.color, fontSize:"16px" }}></i>
+                                </div>
+                                <p style={{ fontSize:"13px", fontWeight:"700", color:"#e2e8f0", marginBottom:"6px" }}>{f.title}</p>
+                                <p style={{ fontSize:"11px", color:"#64748b", lineHeight:"1.5" }}>{f.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        /* ─── AI Assistant ─── */
+        function AssistantView() {
+            const [msgs, setMsgs] = React.useState([
+                { sender:"ai", text:"Officer, I am your Operational AI Assistant — connected to the RAG database of Indian Legal Acts (BNS/BNSS/BSA), police SOPs, and case intelligence. How can I assist you?" }
+            ]);
+            const [input, setInput] = React.useState("");
+            const [asking, setAsking] = React.useState(false);
+            const bottomRef = React.useRef(null);
+            React.useEffect(()=>{ bottomRef.current?.scrollIntoView({behavior:"smooth"}); }, [msgs]);
+
+            const suggested = [
+                "What is the punishment for robbery under BNS?",
+                "Explain SOP for cyber fraud investigation.",
+                "What evidence is admissible under BSA Section 61?",
+                "How to handle a murder crime scene?"
+            ];
+
+            const send = async txt => {
+                const q = txt || input; if (!q.trim()) return;
+                setMsgs(p=>[...p,{sender:"user",text:q}]); setInput(""); setAsking(true);
+                try {
+                    const r=await fetch(`${API_BASE}/agent/qa`,{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question:q}) });
+                    const d=await r.json();
+                    setMsgs(p=>[...p,{sender:"ai",text:d.answer}]);
+                } catch(e) {
+                    setMsgs(p=>[...p,{sender:"ai",text:"Connection error — please ensure the server is running."}]);
+                } finally { setAsking(false); }
+            };
+
+            return (
+                <div style={{ display:"flex", flexDirection:"column", gap:"20px" }}>
+                    <div>
+                        <h1 style={{ fontSize:"24px", fontWeight:"800", letterSpacing:"-0.02em" }}>
+                            <span className="grad-text-blue">AI </span>Assistant Chat
+                        </h1>
+                        <p style={{ color:"#64748b", fontSize:"13px", marginTop:"4px" }}>Query legal statutes, SOPs, and investigation guidelines in natural language.</p>
+                    </div>
+
+                    {/* Suggested prompts */}
+                    <div style={{ display:"flex", gap:"8px", flexWrap:"wrap" }}>
+                        {suggested.map((s,i)=>(
+                            <button key={i} onClick={()=>send(s)} className="btn-ghost"
+                                style={{ padding:"8px 14px", borderRadius:"100px", fontSize:"12px", color:"#94a3b8", fontWeight:"500" }}>
+                                <i className="fa-regular fa-lightbulb" style={{ marginRight:"6px", color:"#f59e0b" }}></i>{s}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Chat window */}
+                    <div className="glass" style={{ borderRadius:"24px", overflow:"hidden", display:"flex", flexDirection:"column", height:"480px" }}>
+                        {/* Header */}
+                        <div style={{ padding:"16px 20px", borderBottom:"1px solid rgba(255,255,255,0.05)", display:"flex", alignItems:"center", gap:"12px", background:"rgba(3,7,18,0.5)" }}>
+                            <div style={{ width:"36px", height:"36px", borderRadius:"10px", background:"linear-gradient(135deg,#1d4ed8,#7c3aed)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                                <i className="fa-solid fa-robot" style={{ color:"#fff", fontSize:"14px" }}></i>
+                            </div>
+                            <div>
+                                <p style={{ fontSize:"13px", fontWeight:"700", color:"#e2e8f0" }}>Operational AI Assistant</p>
+                                <p style={{ fontSize:"10px", color:"#34d399" }}>● Online — RAG Database Connected</p>
+                            </div>
+                        </div>
+
+                        {/* Messages */}
+                        <div style={{ flex:1, overflowY:"auto", padding:"20px", display:"flex", flexDirection:"column", gap:"14px" }}>
+                            {msgs.map((m,i)=>(
+                                <div key={i} style={{ display:"flex", justifyContent: m.sender==="user"?"flex-end":"flex-start" }}>
+                                    {m.sender==="ai" && (
+                                        <div style={{ width:"28px", height:"28px", borderRadius:"8px", background:"linear-gradient(135deg,#1d4ed8,#7c3aed)", display:"flex", alignItems:"center", justifyContent:"center", marginRight:"10px", flexShrink:0 }}>
+                                            <i className="fa-solid fa-robot" style={{ color:"#fff", fontSize:"11px" }}></i>
+                                        </div>
+                                    )}
+                                    <div className={m.sender==="user"?"bubble-user":"bubble-ai"} style={{ maxWidth:"70%", padding:"12px 16px", fontSize:"13px", lineHeight:"1.6", color:"#e2e8f0" }}>
+                                        {m.text}
+                                    </div>
+                                </div>
+                            ))}
+                            {asking && (
+                                <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                                    <div style={{ width:"28px", height:"28px", borderRadius:"8px", background:"linear-gradient(135deg,#1d4ed8,#7c3aed)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                                        <i className="fa-solid fa-robot" style={{ color:"#fff", fontSize:"11px" }}></i>
+                                    </div>
+                                    <div className="bubble-ai" style={{ padding:"12px 16px", display:"flex", gap:"6px", alignItems:"center" }}>
+                                        {[0,1,2].map(i=>(
+                                            <div key={i} style={{ width:"7px", height:"7px", borderRadius:"50%", background:"#3b82f6", animation:"bounce 1.2s ease-in-out infinite", animationDelay:`${i*0.2}s` }}></div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            <div ref={bottomRef}></div>
+                        </div>
+
+                        {/* Input */}
+                        <form onSubmit={e=>{ e.preventDefault(); send(); }}
+                            style={{ padding:"16px", borderTop:"1px solid rgba(255,255,255,0.05)", display:"flex", gap:"12px", background:"rgba(3,7,18,0.5)" }}>
+                            <input value={input} onChange={e=>setInput(e.target.value)}
+                                placeholder="Ask about BNS sections, SOPs, evidence rules..."
+                                className="glass-input" style={{ flex:1, padding:"12px 16px", borderRadius:"12px", fontSize:"13px" }} />
+                            <button type="submit" disabled={asking} className="btn-primary"
+                                style={{ width:"46px", height:"46px", borderRadius:"12px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"15px" }}>
+                                <i className="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        /* ─── Shared UI Primitives ─── */
+        function SectionHeader({ icon, title, color }) {
+            return (
+                <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                    <div style={{ width:"32px", height:"32px", borderRadius:"9px", background:`rgba(${hexToRgb(color)},0.12)`, border:`1px solid rgba(${hexToRgb(color)},0.2)`, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                        <i className={`fa-solid ${icon}`} style={{ color, fontSize:"13px" }}></i>
+                    </div>
+                    <span style={{ fontSize:"14px", fontWeight:"700", color:"#e2e8f0" }}>{title}</span>
+                </div>
+            );
+        }
+
+        function FormField({ label, children }) {
+            return (
+                <div style={{ display:"flex", flexDirection:"column", gap:"6px" }}>
+                    <label style={{ fontSize:"10px", fontWeight:"700", color:"#475569", textTransform:"uppercase", letterSpacing:"0.09em" }}>{label}</label>
+                    {children}
+                </div>
+            );
+        }
+
+        function SeverityBadge({ level }) {
+            const map = { Critical:"badge-critical", High:"badge-high", Medium:"badge-medium", Low:"badge-low" };
+            return <span className={`badge ${map[level]||"badge-medium"}`}>{level||"N/A"}</span>;
+        }
+
+        function PriorityBadge({ level }) {
+            const colors = { P1:"badge-critical", P2:"badge-high", P3:"badge-medium", P4:"badge-low" };
+            return <span className={`badge ${colors[level]||"badge-medium"}`}>{level||"P3"}</span>;
+        }
+
+        function EmptyState({ icon, title, subtitle }) {
+            return (
+                <div className="glass" style={{ padding:"64px 32px", borderRadius:"20px", textAlign:"center", borderStyle:"dashed", borderColor:"rgba(255,255,255,0.06)" }}>
+                    <div style={{ width:"56px", height:"56px", borderRadius:"16px", background:"rgba(30,41,59,0.6)", border:"1px solid rgba(255,255,255,0.06)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px" }}>
+                        <i className={`fa-solid ${icon}`} style={{ fontSize:"22px", color:"#334155" }}></i>
+                    </div>
+                    <p style={{ fontSize:"15px", fontWeight:"700", color:"#475569", marginBottom:"8px" }}>{title}</p>
+                    <p style={{ fontSize:"12px", color:"#334155", maxWidth:"280px", margin:"0 auto", lineHeight:"1.6" }}>{subtitle}</p>
+                </div>
+            );
+        }
+
+        function Loading({ text }) {
+            return (
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"center", padding:"80px", gap:"14px" }}>
+                    <div className="spinner" style={{ width:"24px", height:"24px", borderWidth:"3px" }}></div>
+                    <p style={{ color:"#475569", fontSize:"14px" }}>{text}</p>
+                </div>
+            );
+        }
+
+        function hexToRgb(hex) {
+            const map = { "#3b82f6":"59,130,246", "#a855f7":"168,85,247", "#10b981":"16,185,129", "#f59e0b":"245,158,11", "#06b6d4":"6,182,212" };
+            return map[hex] || "59,130,246";
+        }
+
+        /* ─── bounce animation ─── */
+        const style = document.createElement("style");
+        style.textContent = `@keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:0.5} 40%{transform:translateY(-6px);opacity:1} }`;
+        document.head.appendChild(style);
+
+        /* ─── Mount ─── */
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>
