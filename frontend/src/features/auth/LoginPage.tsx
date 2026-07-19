@@ -584,6 +584,16 @@ export const LoginPage: React.FC = () => {
       officer: demoOfficer
     }
 
+    const isLocalHost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+
+    if (!isLocalHost) {
+      setTempAuthData(mockAuth as any)
+      localStorage.setItem('aipas_demo_user', JSON.stringify(demoOfficer))
+      setLoginStep('mfa_choice')
+      setIsLoading(false)
+      return
+    }
+
     try {
       const response = await apiClient.post('/auth/login', {
         username: u,
@@ -600,7 +610,6 @@ export const LoginPage: React.FC = () => {
       }
       setLoginStep('mfa_choice')
     } catch {
-      // Automatic demo mode login fallback when hosted as a static web app
       setTempAuthData(mockAuth as any)
       localStorage.setItem('aipas_demo_user', JSON.stringify(demoOfficer))
       setLoginStep('mfa_choice')
