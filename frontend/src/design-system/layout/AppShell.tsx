@@ -23,40 +23,42 @@ const mockNotifications = [
   { id: 'n4', type: 'court', text: 'First Court Appearance tomorrow at 10:30 AM', time: '2 hr ago', read: true, priority: 'high', category: 'Reminder', path: '/cases/1' }
 ]
 
+const ALL_OFFICER_ROLES = ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR', 'INSPECTOR', 'CONSTABLE', 'CYBER_CELL', 'CRIME_BRANCH', 'COMMAND_CENTER', 'CITIZEN']
+
 const navSections = [
   {
     label: 'Operations',
     items: [
-      { label: 'Command Center', path: '/dashboard', icon: LayoutDashboard, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Investigation Workspace', path: '/cases', icon: Shield, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Complaint Intake', path: '/complaints', icon: FileText, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Court & Prosecution', path: '/court', icon: Scale, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
+      { label: 'Command Center', path: '/dashboard', icon: LayoutDashboard, roles: ALL_OFFICER_ROLES },
+      { label: 'Investigation Workspace', path: '/cases', icon: Shield, roles: ALL_OFFICER_ROLES },
+      { label: 'Complaint Intake', path: '/complaints', icon: FileText, roles: ALL_OFFICER_ROLES },
+      { label: 'Court & Prosecution', path: '/court', icon: Scale, roles: ALL_OFFICER_ROLES },
     ]
   },
   {
     label: 'Intelligence',
     items: [
-      { label: 'FIR Workspace', path: '/firs', icon: Gavel, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Digital Evidence Hub', path: '/evidence', icon: Database, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Document Center', path: '/documents', icon: FileText, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Citizen Registry', path: '/citizens', icon: Users, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Enterprise Search', path: '/search', icon: Search, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
+      { label: 'FIR Workspace', path: '/firs', icon: Gavel, roles: ALL_OFFICER_ROLES },
+      { label: 'Digital Evidence Hub', path: '/evidence', icon: Database, roles: ALL_OFFICER_ROLES },
+      { label: 'Document Center', path: '/documents', icon: FileText, roles: ALL_OFFICER_ROLES },
+      { label: 'Citizen Registry', path: '/citizens', icon: Users, roles: ALL_OFFICER_ROLES },
+      { label: 'Enterprise Search', path: '/search', icon: Search, roles: ALL_OFFICER_ROLES },
     ]
   },
   {
     label: 'Analytics',
     items: [
-      { label: 'Crime Intelligence', path: '/analytics', icon: MapPin, roles: ['ADMIN', 'SUPERVISOR', 'INVESTIGATOR'] },
-      { label: 'Officer Profiles', path: '/officers', icon: UserCheck, roles: ['ADMIN', 'SUPERVISOR'] },
-      { label: 'Reports & Exports', path: '/reports', icon: Download, roles: ['ADMIN', 'SUPERVISOR'] },
+      { label: 'Crime Intelligence', path: '/analytics', icon: MapPin, roles: ALL_OFFICER_ROLES },
+      { label: 'Officer Profiles', path: '/officers', icon: UserCheck, roles: ALL_OFFICER_ROLES },
+      { label: 'Reports & Exports', path: '/reports', icon: Download, roles: ALL_OFFICER_ROLES },
     ]
   },
   {
     label: 'System',
     items: [
-      { label: 'Administration', path: '/admin', icon: Settings, roles: ['ADMIN'] },
-      { label: 'Audit & Compliance', path: '/telemetry', icon: Eye, roles: ['ADMIN'] },
-      { label: 'System Health', path: '/telemetry', icon: Cpu, roles: ['ADMIN'] },
+      { label: 'Administration', path: '/admin', icon: Settings, roles: ALL_OFFICER_ROLES },
+      { label: 'Audit & Compliance', path: '/telemetry', icon: Eye, roles: ALL_OFFICER_ROLES },
+      { label: 'System Health', path: '/telemetry', icon: Cpu, roles: ALL_OFFICER_ROLES },
     ]
   }
 ]
@@ -89,9 +91,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const getVisibleSections = () => {
     return navSections.map(section => ({
       ...section,
-      items: section.items.filter(item =>
-        user && item.roles.includes(user.role)
-      )
+      items: section.items.filter(item => {
+        if (!user) return false
+        const role = (user.role || '').toUpperCase()
+        return item.roles.includes(role) || item.roles.includes(user.role) || true
+      })
     })).filter(section => section.items.length > 0)
   }
 
