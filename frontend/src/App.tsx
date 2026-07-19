@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { AppRoutes } from '@/app/routes'
 import { useAuth } from '@/hooks/useAuth'
@@ -18,10 +18,10 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <HashRouter>
           <AppRoutes />
           <ToastContainer />
-        </BrowserRouter>
+        </HashRouter>
       </QueryClientProvider>
     </ErrorBoundary>
   )

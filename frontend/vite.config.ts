@@ -4,7 +4,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/police_intelligence_system/',
+  base: './',
   plugins: [react()],
   resolve: {
     alias: {
